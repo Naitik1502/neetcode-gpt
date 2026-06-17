@@ -29,7 +29,7 @@ class Solution:
             dL_dw = X.T@delta_1
             db_dw = np.sum(delta_1)
 
-            print(db_dw.shape)
+            
 
             w -= lr*dL_dw
             b -= lr*db_dw
