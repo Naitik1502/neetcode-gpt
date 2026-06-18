@@ -26,17 +26,12 @@ class GroupedQueryAttention(nn.Module):
         
         k = torch.repeat_interleave(k, self.num_groups, dim = 1)
         v = torch.repeat_interleave(v, self.num_groups, dim = 1)
-        print("Q Shape ", q.shape)
-        print("K Shape ", k.shape)
-        print("V Shape ", v.shape)
+        
         attn_score = (q@k)/math.sqrt(self.head_dim)
-        print("Attn Score Shape ", attn_score.shape)
+        
 
         mask = (torch.ones((T,T))*float('-inf')).triu(diagonal=1)
-
         attn_score = attn_score[:,::, ::] + mask
-
-        print("Attn Score Shape ", attn_score.shape)
         attn_score = nn.functional.softmax(attn_score, dim=-1)
 
         final_attn = (attn_score@v).permute(0,2,1,3).reshape(B, T, -1)
